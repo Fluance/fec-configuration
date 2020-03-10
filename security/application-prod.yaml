@@ -1,0 +1,50 @@
+keycloak:
+  url: https://fluance.net/auth
+  client:
+    clientId: fec-auth
+    clientSecret: password 
+    accessTokenUri: https://fluance.net/auth/realms/FluanceEhealthCockpit/protocol/openid-connect/token
+    userAuthorizationUri: https://fluance.net/auth/realms/FluanceEhealthCockpit/protocol/openid-connect/auth
+    tokenName: Bearer
+    authenticationScheme: header
+    clientAuthenticationScheme: form
+    logoutUrl: https://fluance.net/auth/realms/FluanceEhealthCockpit/protocol/openid-connect/logout?redirect_uri=
+    oidc:
+      logoutUrl: https://fluance.net/oidc/logout?redirectUrl=
+    master:
+      tokenUrl: https://fluance.net/auth/realms/master/protocol/openid-connect/token
+      logoutUrl: https://fluance.net/auth/realms/master/protocol/openid-connect/logout
+    fluanceEhealthCockpit:
+      realmName: FluanceEhealthCockpit
+      getUserUrl: https://fluance.net/auth/admin/realms/FluanceEhealthCockpit/users
+      removeSessionUrl: https://fluance.net/auth/admin/realms/FluanceEhealthCockpit/sessions
+    token:
+      grantype: client_credentials 
+      granttype: client_credentials
+      clientid: fec-auth
+      username: admin
+      password: password 
+      clientsecret: aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee
+  resource:
+    userInfoUri: https://fluance.net/auth/realms/FluanceEhealthCockpit/protocol/openid-connect/userinfo
+    
+clients:
+  fe:
+    url: https://fluance.net
+    
+auth:
+  logout: https://fluance.net/authentication/logout
+
+partners:
+- name: fluance
+  ssl-key-alias: fluance
+  jwt-spec:
+    header:
+      signing-algorithm: RS256
+      type: JWT
+    payload:
+      validity-period: '3600'
+      dynamic-claims:
+      - username
+      - domain
+  granted-company-check-url: http://localhost:8080/ehprofile/profile/{username}/{domain}/{companycode}/exists

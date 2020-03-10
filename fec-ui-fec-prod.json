@@ -1,0 +1,249 @@
+/**
+ * Fluance e-health Cockpit configuration file
+ *
+ * This file configure a builded version.
+ * It is managed by config.provider.js to load dynamicaly in Angular.
+ * This file is check at launch and block the app if wrong
+ */
+{
+    'debug': false,
+    'title': 'eHealth Cockpit',
+    'titleShort': 'FEC',
+    'baseURL': 'https://fluance.fluance.net/', // Webapp URL
+
+    // Server PROD
+    'apiBaseSet': [
+        'https://fluance.fluance.net/'
+    ],
+    'apiServer': 'https://fluance.fluance.net/mw-app',
+    'apiServerNotes': 'https://fluance.fluance.net/mw-app',
+    'apiAuth': 'https://fluance.fluance.net/authentication',
+    'apiEHProfile': 'https://fluance.fluance.net/ehprofile',
+    'apiFullTextSearch': 'https://fluance.fluance.net/mw-app',
+    'apiServerDocuments': 'https://fluance.fluance.net/mw-app',
+    'apiClient': 'https://fluance.fluance.net/ehprofile',
+    'apiClientToken': 'aaaaaaa-bbbb-cccc-dddd-eeeeeeeee',
+    'apiRequestTimeout': 50000,
+
+    'layoutTemplateURL': 'app/layout/shell.html',
+    'defaultLanguage': 'en', // en, de, fr, it
+    'maintenance': false,
+    'cache': true,
+
+    /**
+     * Logs are sended to a centralized server to help support team.
+     * It send plain JSON to a graylog server.
+     */
+    'logSendReports': true,
+    'logServerURL': 'https://logurl.ch:11111/gelf',
+    'logWebInterfaceURL': 'https://logurl.ch:33333',
+
+    // Telemis access
+    // URL build using imagingURL + $translate.use().toUpperCase() + imagingStartApp + pid
+    'imagingURL': 'http://192.168.5.204/',
+    'imagingStartApp': '/start.app?ak=',
+
+    /**
+     * Relation table for our roles and api roles
+     */
+    'roles': {
+        'administrative': ['administrative'],
+        'financial': ['financial'],
+        'nurse': ['nurse'],
+        'physician': ['physician'],
+        'sysadmin': ['sysadmin']
+    },
+    'customerName': 'Swiss Medical Network',
+
+    /**
+     * Routing/navigation configuration section
+     */
+    'routing': {
+        // Application's 'home' state
+        'defaultState': { name: 'mycockpit' },
+
+        // Excluded states
+        'invalidStates': []
+    },
+
+    /**
+     * Dashboard configuration
+     */
+    'dashboard': {
+        componentsBase: 'app/dashboard/components/',
+        components: [
+            // Whiteboard Surgery dashboard calendar component
+            {name: 'WhiteboardSurgeryCalendarDashboardComponent', path: 'whiteboardSurgeryCalendarDashboard/whiteboardSurgeryCalendarDashboard.service.js'},
+            // In/Out Patients by unit: for physician and nurse
+            {name: 'RoomListComponent', params: {by: 'units'}, roles: ['sysadmin', 'physician', 'nurse'], path: 'roomList/roomList.service.js'},
+            // In/Out Patients by service: for physician and nurse
+            {name: 'RoomListComponent', params: {by: 'services'}, roles: ['sysadmin', 'physician', 'nurse'], path: 'roomList/roomList.service.js'},
+            // MyPatient: for physician
+            {name: 'MyPatientComponent', roles: ['sysadmin', 'physician'], path: 'myPatient/myPatient.service.js'},
+            // Patients Schedule by location (clinic): for nurse
+            {name: 'MyAppointmentComponent', params: {by: 'location'}, roles: ['sysadmin', 'nurse'], path: 'myAppointment/myAppointment.service.js'},
+            // Patients Schedule by user (patient): for physician
+            {name: 'MyAppointmentComponent', params: {by: 'user'}, roles: ['sysadmin', 'physician'], path: 'myAppointment/myAppointment.service.js'},
+            // Last Search: for all
+            {name: 'MyLastSearchComponent', path: 'myLastSearch/myLastSearch.service.js'}
+        ]
+    },
+
+    /**
+     * Synlab add-on component
+     */
+    'synlab': {},
+
+    /**
+     * Notes and Picture button component
+     */
+    'note': {},
+
+    /**
+     * Feature of productivity tie-ins
+     */
+     'productivityTieIns': {},
+
+    /**
+     * Tutorial
+     */
+    // 'tutorial': {},
+
+    /*
+     * Multi session feature
+     */
+    //'multiSession': {
+    //    'apiBase': '',
+    //    'showForSharedUsers': false,
+    //    'isDeviceLogoutEnabled': true
+    //},
+
+    /*
+     * Patient Documents feature
+     */
+     'patientDocuments': {
+        active: false, // patient documents
+        generateDocumentEnabled: true // patient prescriptions (eg: pdf)
+    },
+
+    /*
+     * Patient View feature
+    */
+    'patientView': {
+        disableNavigation: true
+    },
+
+    /*
+     * Whiteboard
+    */
+    'whiteboard': {
+        active: true,
+        autoRefreshInterval: 30, // seconds
+        symbolsBedsInRoom: {
+            companyId: 5,
+            byDoor: { number: '1', symbol: 'LOCATION_DOOR' },
+            byWindow: { number: '2', symbol: 'LOCATION_WINDOW' },
+            roomExceptions: ['245','246']
+        },
+        highlightOperationToday: true,
+        tomorrowWhiteboardEnabled: true,
+        configurationEnabled: true
+    },
+
+    'oxygen': {
+        //'issuer': 'oxygen',
+        'forceButtonDisabled': false,
+        'apiBase': 'https://fluance.fluance.net/ehprofile/partners/openwt-oxygen',
+        'urlBase': 'http://oxygen.fluance.net'
+    },
+
+    /*
+     * Whiteboard Surgery
+     */
+     'whiteboardSurgery': {
+        autoRefreshInterval: 60, // seconds
+        autoScrollResetTime: 180, // seconds until auto scroll is reactivated, when user doesn't scroll anymore
+        operatingTimesRefreshInterval: 10, // interval of reloading the operating times in seconds
+
+        autoRefreshIntervalComment: 60, // seconds
+        autoScrollResetTimeAfterSaveComment: 0, // seconds until auto scroll is reactivated, when user edited comment
+
+        operationRooms: { // Company ID as key, operation rooms as value as a String Array
+            3: ["OP1", "OP2", "OP3", "OP4", "OP5"], // CAM
+            4: ["OP1", "OP2", "OP3", "OP4", "OP5"], // CSA
+            5: ["SALLE OP 1", "SALLE OP 2", "SALLE OP 3", "SALLE OP 4", "DIVERS"], // CDG
+            6: ["Salle 1", "Salle 2"], // CDM
+            7: ["SOP 1", "SOP 2", "SOP 2 bis", "SOP 3", "SOP 4"], // CDV
+            8: ["STA-Salle 1", "STA-Salle 2", "STA-Salle 3", "STA-Salle 4"], // CDF
+            9: ["Saal 1", "Saal 2", "Saal 3", "Saal 4", "Saal 5"], // PKB
+            10: ["OP 1", "OP 2", "OP 3"], // PKO
+            11: ["SOP 1", "SOP 2", "SOP 2 bis", "SOP 3", "SOP 4"], // CVA
+            12: ["Salle 1", "Salle 2", "Salle 3", "Salle 4", "Salle 5"], // HDP
+            13: ["OP 1", "OP 2"], // PKV
+            15: ["Salle 1", "Salle 2", "Salle 3"], // CMO
+            18: ["Belair Saal 1", "Belair Saal 2"] // KBS
+        },
+        resource: {
+            occupations: [
+                {codeOccupation:'Op', iconType: 'doctor', translation: 'whiteboardSurgery.PERSONNEL_OCCUPATION_OPERATOR'},
+                {codeOccupation:'OpA', iconType: 'anesthetist', translation: 'whiteboardSurgery.PERSONNEL_OCCUPATION_ANESTHETIST'},
+                {codeOccupation:'OpAss', iconType: 'doctor', translation: 'whiteboardSurgery.PERSONNEL_OCCUPATION_ASSISTANT'},
+                {codeOccupation:'OpAP', iconType: 'employee', translation: 'whiteboardSurgery.PERSONNEL_OCCUPATION_ANESTHESIA_STAFF'},
+                {codeOccupation:'Opl', iconType: 'employee', translation: 'whiteboardSurgery.PERSONNEL_OCCUPATION_INSTRUMENTALIST'},
+                {codeOccupation:'OpZ', iconType: 'employee', translation: 'whiteboardSurgery.PERSONNEL_OCCUPATION_ROOM_HELPER'},
+                {codeOccupation:'null', iconType: 'employee', translation: 'whiteboardSurgery.PERSONNEL_OCCUPATION_ASSISTANT'}
+            ]
+        }
+    },
+
+    /**
+     * Company logos
+     */
+     'company': {
+        'logoUrlBase': '/content/images/logos/company/'
+    },
+
+    'accessControl': {
+        'states': {
+            'admin': {
+                restrictToRoles: ['sysadmin']
+            },
+            'adminUsers': {
+                restrictToRoles: ['sysadmin']
+            },
+            'adminUsersProfile': {
+                restrictToRoles: ['sysadmin']
+            },
+            'adminUsersForm': {
+                restrictToRoles: ['sysadmin']
+            },
+            'icdChopList': {
+                restrictToRoles: ['sysadmin', 'physician', 'nurse', 'patient']
+            },
+            'imagingList': {
+                restrictToRoles: ['sysadmin', 'physician', 'nurse', 'patient']
+            },
+            'invoiceListByGuarantor': {
+                restrictToRoles: ['sysadmin', 'financial', 'patient']
+            },
+            'invoiceListByVisit': {
+                restrictToRoles: ['sysadmin', 'financial']
+            },
+            'invoice': {
+                restrictToRoles: ['sysadmin', 'financial']
+            },
+            'labList': {
+                restrictToRoles: ['sysadmin', 'nurse', 'patient', 'physician']
+            },
+            'policyList': {
+                restrictToRoles: ['sysadmin', 'financial', 'patient', 'guarantor']
+            },
+            'policy': {
+                restrictToRoles: ['sysadmin', 'financial', 'patient', 'guarantor']
+            },
+            'whiteboard': {
+                restrictToRoles: ['sysadmin', 'physician', 'nurse']
+            }
+        }
+    }
+}
